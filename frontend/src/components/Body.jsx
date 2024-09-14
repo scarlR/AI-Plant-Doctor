@@ -29,7 +29,10 @@ const Body = () => {
    formData.append("image", image); 
 
    try {
-     const {data} = await axios.post("http://localhost:3000/analyze", formData);
+     const { data } = await axios.post(
+       "https://ai-plant-doctor-backend.vercel.app/analyze",
+       formData
+     );
 
      setAnalysisResult(data.result);
      
