@@ -31,7 +31,7 @@ const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 
 export const analyze = router.post('/analyze', upload.single('image'), async (req, res) => {
-  console.log("File received:", req.file);
+
 
   try {
     if (!req.file) {
@@ -48,7 +48,7 @@ export const analyze = router.post('/analyze', upload.single('image'), async (re
    
     const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const result = await model.generateContent([
-      'Analyze this plant image and provide detailed analysis of its species, health, and care recommendations. Provide response in plain text. Not include any special charater. the analysis should be done in such a way that it can be understood by 8th standard student',
+      `language should be in ${req.body.lang} . Analyze this plant image and provide detailed analysis of its species, health, and care recommendations. Provide response in plain text. Not include any special charater. Ensure that it must cover the topic Modern cultivation, Breedings, Pests, Diseases, Nutrition, Usages, etc. the analysis should be done in such a way that it can be understood by 8th standard student of any school.`,
       {
         inlineData: {
           mimeType: req.file.mimetype,

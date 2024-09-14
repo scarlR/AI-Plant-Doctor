@@ -7,6 +7,23 @@ const Body = () => {
   const [image, setImage] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+
+  const languages = [
+    { code: "en", name: "English" },
+    { code: "es", name: "Spanish" },
+    { code: "fr", name: "French" },
+    { code: "de", name: "German" },
+    { code: "hi", name: "Hindi" },
+    { code: "it", name: "Italian" },
+    { code: "ja", name: "Japanese" },
+    { code: "ko", name: "Korean" },
+    { code: "pt", name: "Portuguese" },
+    { code: "ru", name: "Russian" },
+    { code: "zh", name: "Chinese" },
+    { code: "ar", name: "Arabic" },
+    { code: "vi", name: "Vietnamese" },
+  ];
 
   
  const handleImageUpload = (event) => {
@@ -27,10 +44,11 @@ const Body = () => {
   
    const formData = new FormData();
    formData.append("image", image); 
+   formData.append("lang", selectedLanguage); 
 
    try {
      const { data } = await axios.post(
-       "https://ai-plant-doctor-backend.vercel.app/analyze",
+       "https://ai-plant-doctor.onrender.com/analyze",
        formData
      );
 
@@ -52,7 +70,6 @@ const Body = () => {
         species, health issues, and care recommendations.
       </p>
 
-     
       <label
         htmlFor="file-upload"
         className="flex justify-center items-center gap-4 rounded-lg px-24 py-2 border-2 cursor-pointer"
@@ -79,11 +96,10 @@ const Body = () => {
         </div>
       )}
 
-  
       <div className="flex items-center justify-center space-x-2 mt-4">
         <button
           onClick={handleAnalyze}
-          disabled={!image || isAnalyzing} 
+          disabled={!image || isAnalyzing}
           className={`flex justify-center items-center gap-4 rounded-lg px-6 py-2 border-2 ${
             isAnalyzing
               ? "bg-gray-400 cursor-not-allowed"
@@ -92,19 +108,26 @@ const Body = () => {
         >
           {isAnalyzing ? "Analyzing..." : "Analyze"}
         </button>
-       
+
+        <select
+          value={selectedLanguage}
+          onChange={(e) => setSelectedLanguage(e.target.value)}
+          className="border-2 px-4 py-2 rounded-lg"
+        >
+          {languages.map((lang) => (
+            <option key={lang.code} value={lang.code}>
+              {lang.name}
+            </option>
+          ))}
+        </select>
       </div>
 
-    
-
-      {analysisResult &&
-        (
-          <div className="mt-4 p-4 bg-gray-200 rounded-lg shadow-lg w-1/2">
-            <h2 className="text-lg font-semibold mb-2">Analysis Result:</h2>
-            <p className="text-sm text-gray-600">{analysisResult}</p>
+      {analysisResult && (
+        <div className="mt-4 p-4 bg-gray-200 rounded-lg shadow-lg w-1/2">
+          <h2 className="text-lg font-semibold mb-2">Analysis Result:</h2>
+          <p className="text-sm text-gray-600">{analysisResult}</p>
         </div>
-        
-        )}
+      )}
     </main>
   );
 };
